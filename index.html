@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Nuestro espacio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      /* PALETA GENERAL */
+      --bg-main: #04081b;
+      --bg-gradient-from: #04081b;
+      --bg-gradient-mid: #131b45;
+      --bg-gradient-to: #3b1b4e;
+
+      --card-bg: #ffffff;
+      --card-border: rgba(255,255,255,0.16);
+
+      --text-main: #050505;
+      --text-soft: #65676b;
+
+      --accent: #ff6aa2;      /* rosado principal */
+      --accent-like: #e0245e;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      /* Fondo general tipo login */
+      background:
+        radial-gradient(circle at top left, #3044b7 0, transparent 45%),
+        radial-gradient(circle at top right, #ff8ac7 0, transparent 50%),
+        linear-gradient(135deg, var(--bg-gradient-from) 0%, var(--bg-gradient-mid) 45%, var(--bg-gradient-to) 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    /* CABECERA ARRIBA (semi-transparente) */
+    .top-header {
+      padding: 8px 12px 6px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(
+        to bottom,
+        rgba(3, 6, 22, 0.75),
+        rgba(3, 6, 22, 0.4),
+        transparent
+      );
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+    .top-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* Botón de tuerca para cerrar sesión (esquina derecha) */
+    .settings-btn {
+      position: absolute;
+      top: 10px;
+      right: 16px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.08);
+      color: #f5f5ff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+      transition:
+        background .12s ease,
+        transform .12s ease,
+        color .12s ease,
+        box-shadow .12s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.45);
+    }
+    .settings-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+    .settings-btn:hover {
+      background: rgba(255,255,255,0.18);
+      color: #ffffff;
+      transform: rotate(20deg) translateY(-1px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.6);
+    }
+
+    /* CONTENIDO (FEED) */
+    .content {
+      padding: 12px 0 80px;
+    }
+    .feed-column {
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 8px;
+    }
+
+    #posts {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    /* TARJETAS DE POSTS */
+    .post {
+      background: var(--card-bg);
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      padding: 10px 12px 12px;
+      box-shadow:
+        0 14px 30px rgba(0,0,0,0.35),
+        0 0 0 1px rgba(255,255,255,0.02);
+    }
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+    .post-author {
+      font-weight: 600;
+      font-size: .86rem;
+      color: var(--text-main);
+    }
+    .post-date {
+      font-size: .72rem;
+      color: var(--text-soft);
+    }
+    .post-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin: 2px 0 4px;
+      color: var(--text-main);
+      letter-spacing: .02em;
+    }
+    .post-message {
+      font-size: .9rem;
+      color: var(--text-main);
+      white-space: pre-wrap;
+      margin-bottom: 4px;
+    }
+    .post-img {
+      width: 100%;
+      border-radius: 12px;
+      margin-top: 6px;
+      display: block;
+      object-fit: cover;
+      max-height: 520px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+    }
+
+    /* ACCIONES (LIKE + COMENTAR) */
+    .post-actions {
+      display: flex;
+      justify-content: space-around;
+      gap: 4px;
+      margin-top: 8px;
+      padding-top: 4px;
+      border-top: 1px solid #f0f2f5;
+    }
+    .action-btn {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: none;
+      background: transparent;
+      color: #65676b;
+      font-size: .82rem;
+      padding: 6px 0;
+      cursor: pointer;
+      border-radius: 999px;
+      transition:
+        background .12s ease,
+        transform .12s ease,
+        color .12s ease,
+        box-shadow .12s ease;
+    }
+    .action-btn:hover {
+      background: #f0f2f5;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .action-btn:active {
+      transform: scale(0.96);
+      box-shadow: none;
+    }
+    .action-btn[disabled] {
+      cursor: default;
+      opacity: 0.7;
+      box-shadow: none;
+    }
+    .action-btn .icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+    }
+    .action-btn .icon svg {
+      width: 100%;
+      height: 100%;
+      fill: currentColor;
+    }
+    .like-btn.liked {
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .action-btn .count {
+      font-size: .78rem;
+      color: #8a8d91;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.18); }
+      100% { transform: scale(1); }
+    }
+    .action-btn.animate {
+      animation: pop .22s ease-out;
+    }
+
+    /* COMENTARIOS */
+    .comments {
+      margin-top: 6px;
+      border-top: 1px solid #f0f2f5;
+      padding-top: 4px;
+    }
+    .comment-item {
+      margin-bottom: 4px;
+    }
+    .comment-header {
+      font-size: .78rem;
+      color: var(--text-soft);
+      display: flex;
+      justify-content: space-between;
+    }
+    .comment-author {
+      font-weight: 600;
+      margin-right: 4px;
+    }
+    .comment-date {
+      font-size: .7rem;
+    }
+    .comment-text {
+      font-size: .86rem;
+      color: var(--text-main);
+      white-space: pre-wrap;
+    }
+
+    /* FORM COMENTARIO PEQUEÑO */
+    .comment-inline-form {
+      margin-top: 6px;
+      display: none;
+      align-items: center;
+      gap: 6px;
+    }
+    .comment-inline-form.open {
+      display: flex;
+    }
+    .comment-inline-input {
+      flex: 1;
+      padding: 6px 9px;
+      border-radius: 999px;
+      border: 1px solid #ccd0d5;
+      font-family: inherit;
+      font-size: .84rem;
+      background: #f5f6f7;
+      outline: none;
+      transition: border-color .12s ease, background .12s ease;
+    }
+    .comment-inline-input:focus {
+      background: #ffffff;
+      border-color: var(--accent);
+    }
+    .comment-inline-send {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.18);
+      transition: background .12s ease, transform .12s ease, box-shadow .12s ease;
+    }
+    .comment-inline-send:hover {
+      background: #ff4f94;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 7px rgba(0,0,0,0.22);
+    }
+    .comment-inline-send svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    /* BOTÓN FLOTANTE + */
+    .fab {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-size: 1.8rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.55);
+      z-index: 20;
+      transition: background .1s ease, transform .1s ease, box-shadow .1s ease;
+    }
+    .fab:hover {
+      background: #ff4f94;
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.65);
+    }
+
+    /* MODAL RECUERDO – fondo como login */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at top, rgba(40,90,180,0.85), rgba(5,15,35,0.95));
+      backdrop-filter: blur(10px);
+    }
+    .modal {
+      width: 100%;
+      max-width: 520px;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 24px 48px rgba(0,0,0,0.75);
+      padding: 18px 20px 18px;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .modal-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin: 0;
+    }
+    .modal-close {
+      border: none;
+      background: transparent;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: var(--text-soft);
+    }
+
+    form {
+      display: grid;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    label {
+      font-size: .8rem;
+      color: var(--text-soft);
+      display: block;
+    }
+    input[type="text"],
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 4px;
+      padding: 7px 9px;
+      border-radius: 8px;
+      border: 1px solid #e0e3eb;
+      font-family: inherit;
+      font-size: .9rem;
+      background: #f5f6f7;
+      transition: border-color .1s ease, background .1s ease, box-shadow .1s ease;
+    }
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: #ffffff;
+      box-shadow: 0 0 0 1px rgba(255,106,162,0.4);
+    }
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    input[type="file"] {
+      margin-top: 4px;
+      font-size: .8rem;
+    }
+    button[type="submit"] {
+      justify-self: flex-end;
+      padding: 9px 22px;
+      border-radius: 999px;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-size: .9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .1s ease, transform .1s ease, box-shadow .1s ease;
+      box-shadow:
+        0 12px 26px rgba(0,0,0,0.35),
+        0 0 0 1px rgba(255,255,255,0.25);
+    }
+    button[type="submit"]:hover {
+      background: #ff4f94;
+      transform: translateY(-1px);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.45);
+    }
+    button[type="submit"]:disabled {
+      background: #b0b3b8;
+      box-shadow: none;
+      transform: none;
+      cursor: default;
+    }
+    #status {
+      font-size: .78rem;
+      color: var(--text-soft);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* LOGIN ESTILO TARJETA AZUL */
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at top, rgba(40,90,180,0.8), rgba(5,15,35,1));
+      color: #fff;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 360px;
+      background: rgba(5, 20, 60, 0.92);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+      padding: 22px 22px 18px;
+      box-sizing: border-box;
+      backdrop-filter: blur(16px);
+    }
+
+    .login-title {
+      margin: 0 0 6px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-align: center;
+      color: #ffffff;
+    }
+    .login-sub {
+      margin: 0 0 14px;
+      font-size: .8rem;
+      text-align: center;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .login-form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    .login-input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 9px 38px 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.45);
+      background: #ffffff;
+      color: #102a5c;
+      font-size: .88rem;
+      outline: none;
+      transition: border-color .14s ease, box-shadow .14s ease;
+    }
+    .login-input::placeholder {
+      color: #9aa0b5;
+    }
+    .login-input:focus {
+      border-color: #ffffff;
+      background: #ffffff;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.5);
+    }
+
+    .input-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,0.9);
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .input-icon svg {
+      width: 100%;
+      height: 100%;
+      fill: currentColor;
+    }
+
+    .login-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .78rem;
+      color: rgba(255,255,255,0.8);
+      margin-top: 4px;
+    }
+    .remember {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .remember input {
+      width: 12px;
+      height: 12px;
+      accent-color: #ffffff;
+      cursor: pointer;
+    }
+
+    .link-btn {
+      border: none;
+      background: transparent;
+      color: rgba(255,255,255,0.9);
+      font-size: .78rem;
+      cursor: pointer;
+      padding: 0;
+    }
+    .link-btn:hover {
+      text-decoration: underline;
+    }
+
+    .login-btn {
+      margin-top: 4px;
+      width: 100%;
+      border: none;
+      border-radius: 999px;
+      padding: 9px 0;
+      background: #ffffff;
+      color: #102a5c;
+      font-weight: 600;
+      font-size: .9rem;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.45);
+      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+    }
+    .login-btn:hover {
+      background: #f2f3ff;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.6);
+    }
+    .login-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+    }
+
+    .login-footer {
+      margin-top: 8px;
+      font-size: .78rem;
+      text-align: center;
+      color: rgba(255,255,255,0.85);
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .login-error {
+      margin-top: 6px;
+      font-size: .78rem;
+      color: #ff6b81;
+      text-align: center;
+      min-height: 12px;
+    }
+
+    /* CÁMARA DENTRO DEL CUADRO DE DETALLES */
+    .details-wrapper {
+      position: relative;
+      margin-top: 4px;
+    }
+    .details-wrapper textarea {
+      padding-right: 40px; /* espacio para la cámara */
+    }
+    .camera-btn {
+      position: absolute;
+      right: 10px;
+      bottom: 8px;
+      border: none;
+      background: transparent;
+      padding: 4px;
+      border-radius: 999px;
+      cursor: pointer;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .12s ease, transform .12s ease, box-shadow .12s ease;
+    }
+    .camera-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+    .camera-btn:hover {
+      background: rgba(255,106,162,0.10);
+      box-shadow: 0 0 0 1px rgba(255,106,162,0.3);
+      transform: translateY(-1px);
+    }
+    .image-info {
+      font-size: .78rem;
+      color: var(--text-soft);
+    }
+
+    @media (max-width: 600px) {
+      .feed-column { padding: 0 4px; }
+      .post { border-radius: 10px; }
+      .modal { margin: 0 8px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- PANTALLA DE LOGIN -->
+  <div class="login-screen" id="login-screen">
+    <div class="login-card">
+      <h2 class="login-title">Login</h2>
+      <p class="login-sub">Solo para Luis Contreras y Valeri Daza.</p>
+
+      <form class="login-form" id="login-form">
+        <div class="input-group">
+          <input
+            type="text"
+            id="login-username"
+            class="login-input"
+            placeholder="Username"
+            required
+          >
+          <span class="input-icon">
+            <svg viewBox="0 0 20 20">
+              <path d="M10 10a3 3 0 1 0-3-3 3 3 0 0 0 3 3zm0 1.5c-3 0-5.5 1.3-5.5 3v.5a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-.5c0-1.7-2.5-3-5.5-3z"></path>
+            </svg>
+          </span>
+        </div>
+
+        <div class="input-group">
+          <input
+            type="password"
+            id="login-password"
+            class="login-input"
+            placeholder="Password"
+            required
+          >
+          <span class="input-icon">
+            <svg viewBox="0 0 20 20">
+              <path d="M10 2a4 4 0 0 0-4 4v2H5a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1h-1V6a4 4 0 0 0-4-4zm-2 4a2 2 0 1 1 4 0v2H8z"></path>
+            </svg>
+          </span>
+        </div>
+
+        <div class="login-row">
+          <label class="remember">
+            <input type="checkbox" id="remember-me">
+            <span>Remember Me</span>
+          </label>
+          <button type="button" class="link-btn">Forget Password?</button>
+        </div>
+
+        <button type="submit" class="login-btn">Login</button>
+
+        <div class="login-footer">
+          <span>Don't have an account?</span>
+          <button type="button" class="link-btn">Register</button>
+        </div>
+
+        <div class="login-error" id="login-error"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CABECERA SIMPLE SIN TEXTO, SOLO TUERCA -->
+  <header class="top-header">
+    <div class="top-inner"></div>
+    <button class="settings-btn" id="logout-btn" title="Cerrar sesión">
+      <svg viewBox="0 0 20 20" aria-hidden="true">
+        <path d="M10 2a2 2 0 0 1 2 2l1.1.3a2 2 0 0 1 1.3 1.3L15 7a2 2 0 0 1 1.5 1.5l.3 1.1a2 2 0 0 1-1.3 2.3L14 12.6a2 2 0 0 1-.5.9l.3 1.1a2 2 0 0 1-1.3 2.3L11 17.7a2 2 0 0 1-2 0l-1.1-.3a2 2 0 0 1-1.3-1.3L6 13a2 2 0 0 1-.5-.9l-1.1-.3a2 2 0 0 1-1.3-2.3L3.5 7A2 2 0 0 1 5 5.5l.3-1.1a2 2 0 0 1 1.3-1.3L8 4a2 2 0 0 1 2-2zm0 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"></path>
+      </svg>
+    </button>
+  </header>
+
+  <!-- CONTENIDO (FEED) -->
+  <main class="content">
+    <div class="feed-column">
+      <div id="posts">Cargando...</div>
+    </div>
+  </main>
+
+  <!-- BOTÓN FLOTANTE + -->
+  <button class="fab" id="fab">+</button>
+
+  <!-- MODAL AGREGAR RECUERDO -->
+  <div class="modal-backdrop hidden" id="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Agregar recuerdo</h2>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <form id="form-recuerdo">
+        <label>
+          Título
+          <input type="text" id="title" required>
+        </label>
+
+        <label>Detalles</label>
+        <div class="details-wrapper">
+          <textarea id="message" required></textarea>
+          <button type="button" class="camera-btn" id="camera-btn" title="Agregar foto">
+            <svg viewBox="0 0 20 20">
+              <path d="M6.5 4h1.4l.7-1.4A1 1 0 0 1 9.5 2h1a1 1 0 0 1 .9.6L12.1 4H13.5A2.5 2.5 0 0 1 16 6.5v7A2.5 2.5 0 0 1 13.5 16h-7A2.5 2.5 0 0 1 4 13.5v-7A2.5 2.5 0 0 1 6.5 4Zm3.5 3a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm0 2a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <input type="file" id="image" accept="image/*" class="hidden">
+        <div class="image-info" id="image-name">Sin foto</div>
+
+        <button type="submit" id="btn-recuerdo">Publicar</button>
+        <div id="status"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Supabase JS v2 UMD -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"></script>
+
+  <script>
+    const SUPABASE_URL = 'https://hkrqvwubhbiwyvwhprsy.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_8-zNqMwYOP14JqI7fE3R4g_a-BsImUw';
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const USERS = {
+      luis:   { id: 'luis',   name: 'Luis Contreras',  password: 'luis2006' },
+      valeri: { id: 'valeri', name: 'Valeri Daza',     password: 'valeri2006' }
+    };
+
+    let currentUser = null;
+
+    const loginScreen   = document.getElementById('login-screen');
+    const loginForm     = document.getElementById('login-form');
+    const loginUsername = document.getElementById('login-username');
+    const loginPassword = document.getElementById('login-password');
+    const loginError    = document.getElementById('login-error');
+    const logoutBtn     = document.getElementById('logout-btn');
+
+    const postsEl       = document.getElementById('posts');
+    const fab           = document.getElementById('fab');
+    const modalBackdrop = document.getElementById('modal-backdrop');
+    const modalClose    = document.getElementById('modal-close');
+    const formRecuerdo  = document.getElementById('form-recuerdo');
+    const titleInput    = document.getElementById('title');
+    const messageInput  = document.getElementById('message');
+    const imageInput    = document.getElementById('image');
+    const statusEl      = document.getElementById('status');
+    const btnRecuerdo   = document.getElementById('btn-recuerdo');
+    const cameraBtn     = document.getElementById('camera-btn');
+    const imageNameEl   = document.getElementById('image-name');
+
+    function getStoredUser() {
+      try {
+        const raw = localStorage.getItem('loggedUser');
+        return raw ? JSON.parse(raw) : null;
+      } catch { return null; }
+    }
+
+    function setCurrentUser(userObj) {
+      currentUser = userObj;
+      localStorage.setItem('loggedUser', JSON.stringify(userObj));
+      loginScreen.classList.add('hidden');
+      loadPosts();
+    }
+
+    function initLogin() {
+      const stored = getStoredUser();
+      if (stored && USERS[stored.id]) {
+        currentUser = stored;
+        loginScreen.classList.add('hidden');
+        loadPosts();
+      } else {
+        currentUser = null;
+        loginScreen.classList.remove('hidden');
+        postsEl.textContent = 'Debes iniciar sesión para ver los recuerdos.';
+      }
+    }
+
+    function getLikedPosts() {
+      try {
+        return JSON.parse(localStorage.getItem('likedPosts') || '[]');
+      } catch { return []; }
+    }
+    function saveLikedPosts(list) {
+      localStorage.setItem('likedPosts', JSON.stringify(list));
+    }
+    function userHasLiked(postId) {
+      if (!currentUser) return false;
+      const list = getLikedPosts();
+      const key = `${postId}-${currentUser.id}`;
+      return list.includes(key);
+    }
+    function markLiked(postId) {
+      if (!currentUser) return;
+      const list = getLikedPosts();
+      const key = `${postId}-${currentUser.id}`;
+      if (!list.includes(key)) {
+        list.push(key);
+        saveLikedPosts(list);
+      }
+    }
+
+    function openModal() {
+      if (!currentUser) { alert('Inicia sesión primero.'); return; }
+      modalBackdrop.classList.remove('hidden');
+    }
+    function closeModal() {
+      modalBackdrop.classList.add('hidden');
+      statusEl.textContent = '';
+    }
+
+    fab.addEventListener('click', openModal);
+    modalClose.addEventListener('click', closeModal);
+    modalBackdrop.addEventListener('click', e => {
+      if (e.target === modalBackdrop) closeModal();
+    });
+
+    // Cámara: abre input de archivo y muestra nombre
+    cameraBtn.addEventListener('click', () => {
+      imageInput.click();
+    });
+    imageInput.addEventListener('change', () => {
+      const file = imageInput.files[0];
+      imageNameEl.textContent = file ? file.name : 'Sin foto';
+    });
+
+    function createCommentElement(author, message, created_at) {
+      const ci = document.createElement('div');
+      ci.className = 'comment-item';
+
+      const ch = document.createElement('div');
+      ch.className = 'comment-header';
+
+      const ca = document.createElement('span');
+      ca.className = 'comment-author';
+      ca.textContent = author || '';
+
+      const cd = document.createElement('span');
+      cd.className = 'comment-date';
+      const d = created_at ? new Date(created_at) : new Date();
+      cd.textContent = d.toLocaleDateString('es-ES', {
+        day: 'numeric', month: 'short', year: 'numeric'
+      });
+
+      ch.appendChild(ca);
+      ch.appendChild(cd);
+
+      const ct = document.createElement('div');
+      ct.className = 'comment-text';
+      ct.textContent = message || '';
+
+      ci.appendChild(ch);
+      ci.appendChild(ct);
+
+      return ci;
+    }
+
+    async function loadPosts() {
+      if (!currentUser) {
+        postsEl.textContent = 'Debes iniciar sesión para ver los recuerdos.';
+        return;
+      }
+
+      postsEl.textContent = 'Cargando...';
+
+      const { data: posts, error: postsError } = await client
+        .from('posts')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (postsError) {
+        console.error(postsError);
+        postsEl.textContent = 'Error al cargar recuerdos';
+        return;
+      }
+
+      const { data: comments, error: commentsError } = await client
+        .from('comments')
+        .select('*')
+        .order('created_at', { ascending: true });
+
+      if (commentsError) console.error(commentsError);
+
+      const commentsByPost = {};
+      if (comments) {
+        comments.forEach(c => {
+          if (!commentsByPost[c.post_id]) commentsByPost[c.post_id] = [];
+          commentsByPost[c.post_id].push(c);
+        });
+      }
+
+      if (!posts || posts.length === 0) {
+        postsEl.textContent = 'Todavía no hay recuerdos.';
+        return;
+      }
+
+      postsEl.innerHTML = '';
+      posts.forEach(row => {
+        const div = document.createElement('div');
+        div.className = 'post';
+
+        const header = document.createElement('div');
+        header.className = 'post-header';
+
+        const author = document.createElement('div');
+        author.className = 'post-author';
+        author.textContent = row.author || 'Nosotros';
+
+        const date = document.createElement('div');
+        date.className = 'post-date';
+        if (row.created_at) {
+          const d = new Date(row.created_at);
+          date.textContent = d.toLocaleDateString('es-ES', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+        }
+
+        header.appendChild(author);
+        header.appendChild(date);
+        div.appendChild(header);
+
+        if (row.title) {
+          const titleEl = document.createElement('div');
+          titleEl.className = 'post-title';
+          titleEl.textContent = row.title;
+          div.appendChild(titleEl);
+        }
+
+        const msg = document.createElement('div');
+        msg.className = 'post-message';
+        msg.textContent = row.message || '';
+        div.appendChild(msg);
+
+        if (row.image_url) {
+          const img = document.createElement('img');
+          img.className = 'post-img';
+          img.src = row.image_url;
+          img.alt = 'Imagen';
+          div.appendChild(img);
+        }
+
+        const commentsContainer = document.createElement('div');
+        commentsContainer.className = 'comments';
+
+        const postComments = commentsByPost[row.id] || [];
+        postComments.forEach(c => {
+          const ci = createCommentElement(c.author, c.message, c.created_at);
+          commentsContainer.appendChild(ci);
+        });
+
+        const inlineForm = document.createElement('div');
+        inlineForm.className = 'comment-inline-form';
+
+        const commentInput = document.createElement('input');
+        commentInput.type = 'text';
+        commentInput.className = 'comment-inline-input';
+        commentInput.placeholder = 'Escribe un comentario...';
+
+        const sendBtn = document.createElement('button');
+        sendBtn.type = 'button';
+        sendBtn.className = 'comment-inline-send';
+        sendBtn.innerHTML = `
+          <svg viewBox="0 0 20 20">
+            <path d="M2.5 17.5L17.5 10 2.5 2.5 2.5 8.5 11 10 2.5 11.5z"></path>
+          </svg>
+        `;
+        sendBtn.addEventListener('click', () =>
+          handleComment(row.id, commentInput, inlineForm, commentsContainer)
+        );
+
+        commentInput.addEventListener('keydown', e => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendBtn.click();
+          }
+        });
+
+        inlineForm.appendChild(commentInput);
+        inlineForm.appendChild(sendBtn);
+        commentsContainer.appendChild(inlineForm);
+
+        const actions = document.createElement('div');
+        actions.className = 'post-actions';
+
+        let likesCount = row.likes ?? 0;
+        const alreadyLiked = userHasLiked(row.id);
+
+        const likeBtn = document.createElement('button');
+        likeBtn.className = 'action-btn like-btn';
+        likeBtn.dataset.postId = row.id;
+        likeBtn.dataset.likes = likesCount.toString();
+        likeBtn.dataset.liked = alreadyLiked ? 'true' : 'false';
+        likeBtn.innerHTML = `
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20">
+              <path d="M9 2c.6 0 1 .4 1 1v4h5.5c.4 0 .7.2.9.6.1.2.1.4.1.6l-1.1 6.2c-.2 1.2-1.2 2-2.4 2H6.5C5.1 17.4 4 16.3 4 15V9c0-.6.4-1 1-1h2l1.4-4.2C8.5 3.3 8.7 3 9 3zM3 8c.6 0 1 .4 1 1v6c0 .6-.4 1-1 1s-1-.4-1-1V9c0-.6.4-1 1-1z"></path>
+            </svg>
+          </span>
+          <span class="label">Me gusta</span>
+          <span class="count">(${likesCount})</span>
+        `;
+        if (alreadyLiked) likeBtn.classList.add('liked');
+        likeBtn.addEventListener('click', () => handleLike(row.id, likeBtn));
+
+        const commentToggleBtn = document.createElement('button');
+        commentToggleBtn.className = 'action-btn comment-toggle-btn';
+        commentToggleBtn.type = 'button';
+        commentToggleBtn.innerHTML = `
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20">
+              <path d="M3 4.5C3 3.7 3.7 3 4.5 3h11c.8 0 1.5.7 1.5 1.5v7c0 .8-.7 1.5-1.5 1.5H8l-3.2 2.4c-.2.2-.5.1-.7-.1-.1-.1-.1-.2-.1-.4V4.5z"></path>
+            </svg>
+          </span>
+          <span class="label">Comentar</span>
+        `;
+        commentToggleBtn.addEventListener('click', () => {
+          const opened = inlineForm.classList.contains('open');
+          if (opened) {
+            inlineForm.classList.remove('open');
+          } else {
+            inlineForm.classList.add('open');
+            commentInput.focus();
+          }
+          commentToggleBtn.classList.add('animate');
+          setTimeout(() => commentToggleBtn.classList.remove('animate'), 220);
+        });
+
+        actions.appendChild(likeBtn);
+        actions.appendChild(commentToggleBtn);
+
+        div.appendChild(actions);
+        div.appendChild(commentsContainer);
+
+        postsEl.appendChild(div);
+      });
+    }
+
+    async function handleLike(postId, button) {
+      if (!currentUser) { alert('Inicia sesión primero.'); return; }
+
+      const alreadyLiked = button.dataset.liked === 'true';
+      if (alreadyLiked) return;
+
+      let currentLikes = parseInt(button.dataset.likes ?? '0', 10);
+      const newLikes = currentLikes + 1;
+
+      button.disabled = true;
+
+      const { error } = await client
+        .from('posts')
+        .update({ likes: newLikes })
+        .eq('id', postId);
+
+      if (error) {
+        console.error(error);
+        button.disabled = false;
+        return;
+      }
+
+      button.dataset.likes = newLikes.toString();
+      button.dataset.liked = 'true';
+
+      const countSpan = button.querySelector('.count');
+      if (countSpan) countSpan.textContent = `(${newLikes})`;
+
+      button.classList.add('liked', 'animate');
+      setTimeout(() => button.classList.remove('animate'), 220);
+      button.disabled = false;
+
+      markLiked(postId);
+    }
+
+    async function handleComment(postId, inputEl, inlineForm, commentsContainer) {
+      if (!currentUser) { alert('Inicia sesión primero.'); return; }
+
+      const author  = currentUser.name;
+      const message = inputEl.value.trim();
+
+      if (!message) {
+        alert('Escribe un comentario.');
+        return;
+      }
+
+      try {
+        const { data: inserted, error } = await client
+          .from('comments')
+          .insert([{ post_id: postId, author, message }])
+          .select()
+          .single();
+
+        if (error) {
+          console.error(error);
+          alert('Error al comentar.');
+          return;
+        }
+
+        const ci = createCommentElement(
+          inserted?.author || author,
+          inserted?.message || message,
+          inserted?.created_at
+        );
+        if (commentsContainer && inlineForm) {
+          commentsContainer.insertBefore(ci, inlineForm);
+        }
+
+        inputEl.value = '';
+        if (inlineForm) inlineForm.classList.remove('open');
+      } catch (err) {
+        console.error(err);
+        alert('Error inesperado al comentar.');
+      }
+    }
+
+    formRecuerdo.addEventListener('submit', async e => {
+      e.preventDefault();
+
+      if (!currentUser) { alert('Inicia sesión primero.'); return; }
+
+      const author  = currentUser.name;
+      const title   = titleInput.value.trim();
+      const message = messageInput.value.trim();
+      const file    = imageInput.files[0];
+
+      if (!title || !message) {
+        statusEl.textContent = 'Pon un título y algunos detalles.';
+        return;
+      }
+
+      btnRecuerdo.disabled = true;
+      statusEl.textContent = 'Publicando...';
+
+      let imageUrl = null;
+
+      try {
+        if (file) {
+          const fileName = `${Date.now()}-${file.name}`;
+          const { data: uploadData, error: uploadError } = await client
+            .storage
+            .from('images')
+            .upload(fileName, file);
+
+          if (uploadError) {
+            console.error(uploadError);
+            statusEl.textContent = 'Error al subir imagen.';
+            btnRecuerdo.disabled = false;
+            return;
+          }
+
+          const { data: publicData, error: publicUrlError } = client
+            .storage
+            .from('images')
+            .getPublicUrl(uploadData.path);
+
+          if (publicUrlError) {
+            console.error(publicUrlError);
+          } else {
+            imageUrl = publicData.publicUrl;
+          }
+        }
+
+        const { error } = await client
+          .from('posts')
+          .insert([{ author, title, message, image_url: imageUrl }]);
+
+        if (error) {
+          console.error(error);
+          statusEl.textContent = 'Error al publicar.';
+          btnRecuerdo.disabled = false;
+          return;
+        }
+
+        statusEl.textContent = 'Publicado';
+        titleInput.value = '';
+        messageInput.value = '';
+        imageInput.value = '';
+        imageNameEl.textContent = 'Sin foto';
+        setTimeout(() => statusEl.textContent = '', 1500);
+        btnRecuerdo.disabled = false;
+
+        closeModal();
+        loadPosts();
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = 'Error inesperado.';
+        btnRecuerdo.disabled = false;
+      }
+    });
+
+    loginForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const u = loginUsername.value.trim().toLowerCase();
+      const p = loginPassword.value;
+
+      const userDef = USERS[u];
+      if (!userDef || p !== userDef.password) {
+        loginError.textContent = 'Usuario o contraseña incorrectos.';
+        return;
+      }
+      loginError.textContent = '';
+      setCurrentUser({ id: userDef.id, name: userDef.name });
+      loginPassword.value = '';
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('loggedUser');
+      currentUser = null;
+      postsEl.textContent = 'Debes iniciar sesión para ver los recuerdos.';
+      loginScreen.classList.remove('hidden');
+    });
+
+    initLogin();
+  </script>
+</body>
+</html>
