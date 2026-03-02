@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
-      /* PALETA GENERAL */
       --bg-main: #04081b;
       --bg-gradient-from: #04081b;
       --bg-gradient-mid: #131b45;
@@ -18,33 +17,74 @@
       --text-main: #050505;
       --text-soft: #65676b;
 
-      --accent: #ff6aa2;      /* rosado principal */
+      --accent: #ff6aa2;
       --accent-like: #e0245e;
     }
 
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      /* Fondo general tipo login */
+      /* Fondo degradado animado */
       background:
-        radial-gradient(circle at top left, #3044b7 0, transparent 45%),
-        radial-gradient(circle at top right, #ff8ac7 0, transparent 50%),
-        linear-gradient(135deg, var(--bg-gradient-from) 0%, var(--bg-gradient-mid) 45%, var(--bg-gradient-to) 100%);
+        radial-gradient(circle at top left, rgba(255, 190, 220, 0.55), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(130, 170, 255, 0.5), transparent 55%),
+        linear-gradient(135deg, #050923 0%, #2b2e63 40%, #6a2b63 75%, #f18fb8 100%);
+      background-size: 180% 180%;
+      animation: gradientMove 22s ease-in-out infinite alternate;
       color: var(--text-main);
       min-height: 100vh;
+      position: relative;
+    }
+
+    /* Brillos suaves flotando */
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(255,255,255,0.22) 0, transparent 70%);
+      opacity: 0.35;
+      filter: blur(1px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::before {
+      top: 120px;
+      left: 8%;
+      animation: floatSoft 18s ease-in-out infinite alternate;
+    }
+    body::after {
+      bottom: 80px;
+      right: 10%;
+      animation: floatSoft2 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes gradientMove {
+      0%   { background-position: 0% 0%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 100%; }
+    }
+    @keyframes floatSoft {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-18px); }
+    }
+    @keyframes floatSoft2 {
+      from { transform: translateY(0); }
+      to   { transform: translateY(14px); }
     }
 
     /* CABECERA ARRIBA (semi-transparente) */
     .top-header {
-      padding: 8px 12px 6px;
+      padding: 10px 12px 6px;
       position: sticky;
       top: 0;
       z-index: 10;
       backdrop-filter: blur(14px);
       background: linear-gradient(
         to bottom,
-        rgba(3, 6, 22, 0.75),
-        rgba(3, 6, 22, 0.4),
+        rgba(3, 6, 22, 0.85),
+        rgba(3, 6, 22, 0.5),
         transparent
       );
       border-bottom: 1px solid rgba(255,255,255,0.12);
@@ -52,6 +92,50 @@
     .top-inner {
       max-width: 720px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-heart {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #ffb3d1 0, #ff6aa2 50%, #b92569 100%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.25), 0 8px 18px rgba(0,0,0,0.55);
+    }
+    .brand-heart svg {
+      width: 14px;
+      height: 14px;
+      fill: #fff;
+    }
+
+    .app-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #f5f5ff;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .app-subtitle {
+      font-size: .8rem;
+      color: rgba(255,255,255,0.85);
+      margin-top: 2px;
+    }
+
+    .app-tagline {
+      margin-top: 4px;
+      font-size: .78rem;
+      color: rgba(255,255,255,0.85);
+      font-style: italic;
     }
 
     /* Botón de tuerca para cerrar sesión (esquina derecha) */
@@ -63,7 +147,7 @@
       height: 28px;
       border-radius: 50%;
       border: none;
-      background: rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.12);
       color: #f5f5ff;
       display: inline-flex;
       align-items: center;
@@ -83,7 +167,7 @@
       fill: currentColor;
     }
     .settings-btn:hover {
-      background: rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.22);
       color: #ffffff;
       transform: rotate(20deg) translateY(-1px);
       box-shadow: 0 6px 14px rgba(0,0,0,0.6);
@@ -91,13 +175,50 @@
 
     /* CONTENIDO (FEED) */
     .content {
-      padding: 12px 0 80px;
+      padding: 18px 0 80px;
+      position: relative;
+      z-index: 1;
     }
+
+    /* Panel central que combina con el fondo */
     .feed-column {
       width: 100%;
-      max-width: 720px;
+      max-width: 740px;
       margin: 0 auto;
-      padding: 0 8px;
+      padding: 16px 12px 20px;
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.06), transparent 60%),
+        linear-gradient(150deg, rgba(9,10,36,0.95), rgba(38,26,78,0.96));
+      box-shadow:
+        0 26px 60px rgba(0,0,0,0.75),
+        0 0 0 1px rgba(255,255,255,0.08);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: #fdfdff;
+      animation: panelIn .4s ease-out forwards;
+    }
+
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateY(8px) scale(.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .feed-intro {
+      text-align: center;
+      margin: 4px 0 10px;
+      color: #fdfdff;
+    }
+    .feed-title {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+    .feed-caption {
+      margin: 4px 0 0;
+      font-size: .82rem;
+      opacity: 0.9;
     }
 
     #posts {
@@ -107,16 +228,35 @@
       margin-top: 8px;
     }
 
-    /* TARJETAS DE POSTS */
+    /* TARJETAS DE POSTS (fondo que mezcla con el panel) */
     .post {
-      background: var(--card-bg);
-      border-radius: 14px;
-      border: 1px solid var(--card-border);
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.06), transparent 65%),
+        linear-gradient(145deg, rgba(15,12,46,0.95), rgba(52,31,88,0.96));
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.09);
       padding: 10px 12px 12px;
       box-shadow:
-        0 14px 30px rgba(0,0,0,0.35),
-        0 0 0 1px rgba(255,255,255,0.02);
+        0 18px 40px rgba(0,0,0,0.60),
+        0 0 0 1px rgba(0,0,0,0.35);
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp .35s ease forwards;
+      transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        border-color .18s ease,
+        background .18s ease;
     }
+    .post:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 52px rgba(0,0,0,0.8);
+      border-color: rgba(255,106,162,0.6);
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.08), transparent 70%),
+        linear-gradient(145deg, rgba(20,14,58,0.98), rgba(64,35,104,0.98));
+    }
+
     .post-header {
       display: flex;
       justify-content: space-between;
@@ -126,33 +266,48 @@
     .post-author {
       font-weight: 600;
       font-size: .86rem;
-      color: var(--text-main);
+      color: #ffdfef;
     }
     .post-date {
       font-size: .72rem;
-      color: var(--text-soft);
+      color: rgba(230,230,255,0.75);
     }
     .post-title {
       font-weight: 700;
       font-size: 1rem;
       margin: 2px 0 4px;
-      color: var(--text-main);
+      color: #ffffff;
       letter-spacing: .02em;
     }
     .post-message {
       font-size: .9rem;
-      color: var(--text-main);
+      color: #f4f4ff;
       white-space: pre-wrap;
       margin-bottom: 4px;
     }
+
+    /* IMÁGENES: completas + animación */
     .post-img {
       width: 100%;
-      border-radius: 12px;
+      height: auto;
+      border-radius: 14px;
       margin-top: 6px;
       display: block;
-      object-fit: cover;
-      max-height: 520px;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+      box-shadow:
+        0 18px 40px rgba(0,0,0,0.65),
+        0 0 0 1px rgba(255,255,255,0.10);
+      transition:
+        transform .35s ease,
+        box-shadow .35s ease,
+        filter .35s ease;
+      transform-origin: center center;
+    }
+    .post-img:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow:
+        0 26px 60px rgba(0,0,0,0.85),
+        0 0 0 1px rgba(255,106,162,0.6);
+      filter: saturate(1.06);
     }
 
     /* ACCIONES (LIKE + COMENTAR) */
@@ -162,7 +317,7 @@
       gap: 4px;
       margin-top: 8px;
       padding-top: 4px;
-      border-top: 1px solid #f0f2f5;
+      border-top: 1px solid rgba(255,255,255,0.10);
     }
     .action-btn {
       flex: 1;
@@ -172,7 +327,7 @@
       gap: 6px;
       border: none;
       background: transparent;
-      color: #65676b;
+      color: rgba(235,235,255,0.85);
       font-size: .82rem;
       padding: 6px 0;
       cursor: pointer;
@@ -184,8 +339,8 @@
         box-shadow .12s ease;
     }
     .action-btn:hover {
-      background: #f0f2f5;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.35);
     }
     .action-btn:active {
       transform: scale(0.96);
@@ -214,7 +369,7 @@
     }
     .action-btn .count {
       font-size: .78rem;
-      color: #8a8d91;
+      color: rgba(210,210,235,0.9);
     }
 
     @keyframes pop {
@@ -226,10 +381,15 @@
       animation: pop .22s ease-out;
     }
 
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
     /* COMENTARIOS */
     .comments {
       margin-top: 6px;
-      border-top: 1px solid #f0f2f5;
+      border-top: 1px solid rgba(255,255,255,0.10);
       padding-top: 4px;
     }
     .comment-item {
@@ -237,20 +397,21 @@
     }
     .comment-header {
       font-size: .78rem;
-      color: var(--text-soft);
+      color: rgba(230,230,255,0.75);
       display: flex;
       justify-content: space-between;
     }
     .comment-author {
       font-weight: 600;
       margin-right: 4px;
+      color: #ffe6f5;
     }
     .comment-date {
       font-size: .7rem;
     }
     .comment-text {
       font-size: .86rem;
-      color: var(--text-main);
+      color: #f7f7ff;
       white-space: pre-wrap;
     }
 
@@ -268,15 +429,19 @@
       flex: 1;
       padding: 6px 9px;
       border-radius: 999px;
-      border: 1px solid #ccd0d5;
+      border: 1px solid rgba(255,255,255,0.30);
       font-family: inherit;
       font-size: .84rem;
-      background: #f5f6f7;
+      background: rgba(255,255,255,0.08);
+      color: #ffffff;
       outline: none;
       transition: border-color .12s ease, background .12s ease;
     }
+    .comment-inline-input::placeholder {
+      color: rgba(230,230,255,0.7);
+    }
     .comment-inline-input:focus {
-      background: #ffffff;
+      background: rgba(10,10,36,0.85);
       border-color: var(--accent);
     }
     .comment-inline-send {
@@ -290,13 +455,13 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.18);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.35);
       transition: background .12s ease, transform .12s ease, box-shadow .12s ease;
     }
     .comment-inline-send:hover {
       background: #ff4f94;
       transform: translateY(-1px);
-      box-shadow: 0 3px 7px rgba(0,0,0,0.22);
+      box-shadow: 0 3px 7px rgba(0,0,0,0.45);
     }
     .comment-inline-send svg {
       width: 14px;
@@ -324,11 +489,17 @@
       box-shadow: 0 10px 22px rgba(0,0,0,0.55);
       z-index: 20;
       transition: background .1s ease, transform .1s ease, box-shadow .1s ease;
+      animation: pulseFab 2.2s ease-in-out infinite;
     }
     .fab:hover {
       background: #ff4f94;
       transform: translateY(-1px);
       box-shadow: 0 14px 28px rgba(0,0,0,0.65);
+    }
+    @keyframes pulseFab {
+      0%   { transform: translateY(0) scale(1);   box-shadow: 0 10px 22px rgba(0,0,0,0.55); }
+      50%  { transform: translateY(-1px) scale(1.05); box-shadow: 0 14px 30px rgba(0,0,0,0.7); }
+      100% { transform: translateY(0) scale(1);   box-shadow: 0 10px 22px rgba(0,0,0,0.55); }
     }
 
     /* MODAL RECUERDO – fondo como login */
@@ -444,7 +615,7 @@
       display: none !important;
     }
 
-    /* LOGIN ESTILO TARJETA AZUL */
+    /* LOGIN ESTILO TARJETA AZUL + ANIMACIÓN DE ENTRADA DE LA PANTALLA */
     .login-screen {
       position: fixed;
       inset: 0;
@@ -452,9 +623,25 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      /* Fondo opaco, sin transparencia */
       background:
-        radial-gradient(circle at top, rgba(40,90,180,0.8), rgba(5,15,35,1));
+        radial-gradient(circle at top, #285ab4, #050f23);
       color: #fff;
+
+      /* Animación de entrada de toda la pantalla */
+      opacity: 0;
+      animation: loginScreenIn .45s ease forwards;
+    }
+
+    @keyframes loginScreenIn {
+      from {
+        opacity: 0;
+        transform: scale(1.02);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
     .login-card {
@@ -467,6 +654,12 @@
       padding: 22px 22px 18px;
       box-sizing: border-box;
       backdrop-filter: blur(16px);
+      animation: cardIn .4s ease forwards;
+    }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(10px) scale(.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     .login-title {
@@ -554,18 +747,6 @@
       cursor: pointer;
     }
 
-    .link-btn {
-      border: none;
-      background: transparent;
-      color: rgba(255,255,255,0.9);
-      font-size: .78rem;
-      cursor: pointer;
-      padding: 0;
-    }
-    .link-btn:hover {
-      text-decoration: underline;
-    }
-
     .login-btn {
       margin-top: 4px;
       width: 100%;
@@ -614,7 +795,7 @@
       margin-top: 4px;
     }
     .details-wrapper textarea {
-      padding-right: 40px; /* espacio para la cámara */
+      padding-right: 40px;
     }
     .camera-btn {
       position: absolute;
@@ -647,8 +828,8 @@
     }
 
     @media (max-width: 600px) {
-      .feed-column { padding: 0 4px; }
-      .post { border-radius: 10px; }
+      .feed-column { padding: 12px 8px 18px; border-radius: 18px; }
+      .post { border-radius: 14px; }
       .modal { margin: 0 8px; }
     }
   </style>
@@ -657,8 +838,8 @@
   <!-- PANTALLA DE LOGIN -->
   <div class="login-screen" id="login-screen">
     <div class="login-card">
-      <h2 class="login-title">Login</h2>
-      <p class="login-sub">Solo para Luis Contreras y Valeri Daza.</p>
+      <h2 class="login-title">Nuestro espacio</h2>
+      <p class="login-sub">Un lugar privado para guardar todo lo bonito de Luis y Valeri.</p>
 
       <form class="login-form" id="login-form">
         <div class="input-group">
@@ -666,7 +847,7 @@
             type="text"
             id="login-username"
             class="login-input"
-            placeholder="Username"
+            placeholder="Usuario"
             required
           >
           <span class="input-icon">
@@ -681,7 +862,7 @@
             type="password"
             id="login-password"
             class="login-input"
-            placeholder="Password"
+            placeholder="Contraseña"
             required
           >
           <span class="input-icon">
@@ -694,16 +875,14 @@
         <div class="login-row">
           <label class="remember">
             <input type="checkbox" id="remember-me">
-            <span>Remember Me</span>
+            <span>Recordarme en este dispositivo</span>
           </label>
-          <button type="button" class="link-btn">Forget Password?</button>
         </div>
 
-        <button type="submit" class="login-btn">Login</button>
+        <button type="submit" class="login-btn">Entrar</button>
 
         <div class="login-footer">
-          <span>Don't have an account?</span>
-          <button type="button" class="link-btn">Register</button>
+          <span>Hecho con cariño solo para nosotros dos.</span>
         </div>
 
         <div class="login-error" id="login-error"></div>
@@ -711,9 +890,22 @@
     </div>
   </div>
 
-  <!-- CABECERA SIMPLE SIN TEXTO, SOLO TUERCA -->
+  <!-- CABECERA CON TÍTULO Y CONTADOR -->
   <header class="top-header">
-    <div class="top-inner"></div>
+    <div class="top-inner">
+      <div class="brand-row">
+        <div class="brand-heart" aria-hidden="true">
+          <svg viewBox="0 0 20 20">
+            <path d="M10 17s-4.4-2.9-6.6-5.2C2 10.3 1.5 8.9 1.5 7.7 1.5 5.6 3.1 4 5.2 4c1.2 0 2.3.6 2.9 1.6C8.5 4.6 9.6 4 10.8 4c2.1 0 3.7 1.6 3.7 3.7 0 1.3-.5 2.7-1.9 4.1C14.4 14.1 10 17 10 17z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="app-title">Luis &amp; Valeri</div>
+          <div class="app-subtitle" id="days-counter"></div>
+        </div>
+      </div>
+      <div class="app-tagline" id="love-quote"></div>
+    </div>
     <button class="settings-btn" id="logout-btn" title="Cerrar sesión">
       <svg viewBox="0 0 20 20" aria-hidden="true">
         <path d="M10 2a2 2 0 0 1 2 2l1.1.3a2 2 0 0 1 1.3 1.3L15 7a2 2 0 0 1 1.5 1.5l.3 1.1a2 2 0 0 1-1.3 2.3L14 12.6a2 2 0 0 1-.5.9l.3 1.1a2 2 0 0 1-1.3 2.3L11 17.7a2 2 0 0 1-2 0l-1.1-.3a2 2 0 0 1-1.3-1.3L6 13a2 2 0 0 1-.5-.9l-1.1-.3a2 2 0 0 1-1.3-2.3L3.5 7A2 2 0 0 1 5 5.5l.3-1.1a2 2 0 0 1 1.3-1.3L8 4a2 2 0 0 1 2-2zm0 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"></path>
@@ -724,6 +916,10 @@
   <!-- CONTENIDO (FEED) -->
   <main class="content">
     <div class="feed-column">
+      <div class="feed-intro">
+        <h1 class="feed-title">Nuestros recuerdos</h1>
+        <p class="feed-caption">Un rincón solo para lo que hemos vivido tú y yo.</p>
+      </div>
       <div id="posts">Cargando...</div>
     </div>
   </main>
@@ -770,6 +966,39 @@
     const SUPABASE_URL = 'https://hkrqvwubhbiwyvwhprsy.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_8-zNqMwYOP14JqI7fE3R4g_a-BsImUw';
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // FECHA EN QUE EMPEZARON (22 de septiembre de 2025)
+    const START_DATE = new Date('2025-09-22T00:00:00');
+
+    const LOVE_QUOTES = [
+      'Aquí guardamos todo lo que no queremos olvidar.',
+      'Cada recuerdo es una forma de decir: gracias por estar conmigo.',
+      'Este espacio existe porque tú existes en mi vida.',
+      'Nuestra historia merece ser recordada con detalle.',
+      'Lo mejor de mi vida cabe en estos pequeños momentos.'
+    ];
+
+    function updateDaysCounter() {
+      const el = document.getElementById('days-counter');
+      if (!el) return;
+
+      const now = new Date();
+      const diffMs = now - START_DATE;
+      const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+      if (days < 0) {
+        el.textContent = 'Faltan ' + Math.abs(days) + ' días para nuestro día 1';
+      } else {
+        el.textContent = `Juntos hace ${days} días`;
+      }
+    }
+
+    function setRandomQuote() {
+      const el = document.getElementById('love-quote');
+      if (!el) return;
+      const idx = Math.floor(Math.random() * LOVE_QUOTES.length);
+      el.textContent = LOVE_QUOTES[idx];
+    }
 
     const USERS = {
       luis:   { id: 'luis',   name: 'Luis Contreras',  password: 'luis2006' },
@@ -944,9 +1173,10 @@
       }
 
       postsEl.innerHTML = '';
-      posts.forEach(row => {
+      posts.forEach((row, index) => {
         const div = document.createElement('div');
         div.className = 'post';
+        div.style.animationDelay = `${index * 70}ms`;
 
         const header = document.createElement('div');
         header.className = 'post-header';
@@ -1261,6 +1491,8 @@
       loginScreen.classList.remove('hidden');
     });
 
+    updateDaysCounter();
+    setRandomQuote();
     initLogin();
   </script>
 </body>
