@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -216,8 +217,8 @@
       transition:
         background .12s ease,
         transform .12s ease,
-        color .12s.ease,
-        box-shadow .12s.ease;
+        color .12s ease,
+        box-shadow .12s ease;
     }
     .settings-btn svg {
       width: 16px;
@@ -384,8 +385,8 @@
       cursor: pointer;
       border-radius: 999px;
       transition:
-        background .12s ease,
-        transform .12s ease,
+        background .12s.ease,
+        transform .12s.ease,
         color .12s.ease,
         box-shadow .12s.ease;
     }
@@ -476,7 +477,7 @@
       background: rgba(255,255,255,0.08);
       color: #ffffff;
       outline: none;
-      transition: border-color .12s.ease, background .12s.ease;
+      transition: border-color .12s ease, background .12s ease;
     }
     .comment-inline-input::placeholder {
       color: rgba(230,230,255,0.7);
@@ -497,7 +498,7 @@
       justify-content: center;
       cursor: pointer;
       box-shadow: 0 2px 4px rgba(0,0,0,0.35);
-      transition: background .12s.ease, transform .12s.ease, box-shadow .12s.ease;
+      transition: background .12s ease, transform .12s.ease, box-shadow .12s.ease;
     }
     .comment-inline-send:hover {
       background: #ff4f94;
@@ -555,7 +556,7 @@
       font-size: 18px;
       color: var(--accent);
       opacity: 0;
-      animation: heartFloat 2.6s.ease-out forwards;
+      animation: heartFloat 2.6s ease-out forwards;
     }
     @keyframes heartFloat {
       0% { transform: translateY(0) translateX(0) scale(.6); opacity: 0; }
@@ -615,7 +616,7 @@
         -8px 6px #ffc94a,
         -10px 0 #7b9dff,
         -8px -6px #ff9f7b;
-      animation: fireworkBurst 900ms.ease-out forwards;
+      animation: fireworkBurst 900ms ease-out forwards;
     }
     @keyframes fireworkBurst {
       0% { transform: scale(0.2); opacity: 0; }
@@ -662,6 +663,106 @@
       cursor: pointer;
       color: var(--text-soft);
     }
+
+    /* Formularios dentro de los modales (diseño anterior) */
+    form {
+      display: grid;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    label {
+      font-size: .8rem;
+      color: var(--text-soft);
+      display: block;
+    }
+    input[type="text"],
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 4px;
+      padding: 7px 9px;
+      border-radius: 8px;
+      border: 1px solid #e0e3eb;
+      font-family: inherit;
+      font-size: .9rem;
+      background: #f5f6f7;
+      transition: border-color .1s ease, background .1s ease, box-shadow .1s.ease;
+    }
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: #ffffff;
+      box-shadow: 0 0 0 1px rgba(255,106,162,0.4);
+    }
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    button[type="submit"] {
+      justify-self: flex-end;
+      padding: 9px 22px;
+      border-radius: 999px;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-size: .9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .1s ease, transform .1s.ease, box-shadow .1s.ease;
+      box-shadow:
+        0 12px 26px rgba(0,0,0,0.35),
+        0 0 0 1px rgba(255,255,255,0.25);
+    }
+    button[type="submit"]:hover {
+      background: #ff4f94;
+      transform: translateY(-1px);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.45);
+    }
+    button[type="submit"]:disabled {
+      background: #b0b3b8;
+      box-shadow: none;
+      transform: none;
+      cursor: default;
+    }
+
+    #status,
+    #letter-status {
+      font-size: .78rem;
+      color: var(--text-soft);
+    }
+
+    /* Detalles + cámara + texto "Sin foto" (como antes) */
+    .details-wrapper {
+      position: relative;
+      margin-top: 4px;
+    }
+    .details-wrapper textarea {
+      padding-right: 40px;
+    }
+    .camera-btn {
+      position: absolute;
+      right: 10px;
+      bottom: 8px;
+      border: none;
+      background: transparent;
+      padding: 4px;
+      border-radius: 999px;
+      cursor: pointer;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .12s ease, transform .12s ease, box-shadow .12s.ease;
+    }
+    .camera-btn svg { width: 18px; height: 18px; fill: currentColor; }
+    .camera-btn:hover {
+      background: rgba(255,106,162,0.10);
+      box-shadow: 0 0 0 1px rgba(255,106,162,0.3);
+      transform: translateY(-1px);
+    }
+    .image-info { font-size: .78rem; color: var(--text-soft); }
 
     /* MODAL CARTAS */
     #letters-modal-backdrop .modal {
@@ -739,10 +840,10 @@
       color: #f5f5ff;
       font-size: .8rem;
       transition:
-        background .12s ease,
-        transform .12s ease,
-        box-shadow .12s ease,
-        border-color .12s ease;
+        background .12s.ease,
+        transform .12s.ease,
+        box-shadow .12s.ease,
+        border-color .12s.ease;
     }
     .letter-item:hover {
       background: rgba(255,255,255,0.04);
@@ -819,7 +920,7 @@
       align-items:center;
       justify-content:center;
       font-size:1.1rem;
-      transition: background .12s.ease, transform .12s.ease, box-shadow .12s.ease;
+      transition: background .12s ease, transform .12s ease, box-shadow .12s.ease;
     }
     #open-compose-btn:hover {
       background:#ff4f94;
@@ -877,7 +978,7 @@
     }
 
     .letter-envelope.play .envelope-flap {
-      animation: envelopeFlapOpen 0.7s.ease-out 0.25s forwards;
+      animation: envelopeFlapOpen 0.7s ease-out 0.25s forwards;
     }
 
     .envelope-paper-icon {
@@ -1045,7 +1146,7 @@
       color: #102a5c;
       font-size: .88rem;
       outline: none;
-      transition: border-color .14s ease, box-shadow .14s ease;
+      transition: border-color .14s ease, box-shadow .14s.ease;
     }
     .login-input::placeholder { color: #9aa0b5; }
     .login-input:focus {
@@ -1100,7 +1201,7 @@
       font-size: .9rem;
       cursor: pointer;
       box-shadow: 0 8px 18px rgba(0,0,0,0.45);
-      transition: transform .12s.ease, box-shadow .12s.ease, background .12s.ease;
+      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
     }
     .login-btn:hover {
       background: #f2f3ff;
@@ -1128,36 +1229,16 @@
       min-height: 12px;
     }
 
-    .details-wrapper { position: relative; margin-top: 4px; }
-    .details-wrapper textarea { padding-right: 40px; }
-    .camera-btn {
-      position: absolute;
-      right: 10px;
-      bottom: 8px;
-      border: none;
-      background: transparent;
-      padding: 4px;
-      border-radius: 999px;
-      cursor: pointer;
-      color: var(--accent);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: background .12s ease, transform .12s ease, box-shadow .12s.ease;
-    }
-    .camera-btn svg { width: 18px; height: 18px; fill: currentColor; }
-    .camera-btn:hover {
-      background: rgba(255,106,162,0.10);
-      box-shadow: 0 0 0 1px rgba(255,106,162,0.3);
-      transform: translateY(-1px);
-    }
-    .image-info { font-size: .78rem; color: var(--text-soft); }
-
     .hidden { display: none !important; }
 
     #letter-message {
       min-height: 150px;
       line-height: 1.6;
+    }
+
+    @keyframes loginScreenIn {
+      from { opacity: 0; transform: scale(1.02); }
+      to   { opacity: 1; transform: scale(1); }
     }
 
     @media (max-width: 600px) {
@@ -2290,3 +2371,4 @@ Tu persona.`;
   </script>
 </body>
 </html>
+```
