@@ -167,7 +167,7 @@
       cursor: pointer;
       padding: 0;
       box-shadow: 0 4px 10px rgba(0,0,0,0.45);
-      transition: background .12s ease, transform .12s ease, box-shadow .12s ease, color .12s ease;
+      transition: background .12s ease, transform .12s ease, box-shadow .12s.ease, color .12s.ease;
     }
     .mail-btn svg {
       width: 16px;
@@ -200,7 +200,7 @@
 
     .settings-btn {
       position: absolute;
-      top: 10px;
+      top: 4px;       /* SUBIDO UN POCO PARA QUE QUEDE MÁS ARRIBA */
       right: 16px;
       width: 28px;
       height: 28px;
@@ -351,7 +351,7 @@
         0 0 0 1px rgba(255,255,255,0.10);
       transition:
         transform .35s ease,
-        box-shadow .35s ease,
+        box-shadow .35s.ease,
         filter .35s.ease;
       transform-origin: center center;
     }
@@ -477,7 +477,7 @@
       background: rgba(255,255,255,0.08);
       color: #ffffff;
       outline: none;
-      transition: border-color .12s ease, background .12s ease;
+      transition: border-color .12s.ease, background .12s.ease;
     }
     .comment-inline-input::placeholder {
       color: rgba(230,230,255,0.7);
@@ -907,7 +907,7 @@
     #open-compose-btn {
       position:absolute;
       right:16px;
-      bottom:10px;
+      bottom:70px;   /* MÁS ARRIBA PARA QUE NO QUEDE PEGADO ABAJO */
       width:44px;
       height:44px;
       border-radius:50%;
@@ -1115,7 +1115,7 @@
       padding: 22px 22px 18px;
       box-sizing: border-box;
       backdrop-filter: blur(16px);
-      animation: cardIn .4s ease forwards;
+      animation: cardIn .4s.ease forwards;
     }
     @keyframes cardIn {
       from { opacity: 0; transform: translateY(10px) scale(.97); }
