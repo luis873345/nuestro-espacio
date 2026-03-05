@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -87,7 +87,7 @@
     /* HEADER BAJADO PARA QUE LOS BOTONES QUEDEN ENCIMA */
     .top-header {
       padding: 10px 12px 6px;
-      position: relative;      /* antes sticky */
+      position: relative;
       top: 0;
       z-index: 10;
       margin-top: 40px;        /* espacio para los botones flotantes */
@@ -163,7 +163,7 @@
       cursor: pointer;
       padding: 0;
       box-shadow: 0 4px 10px rgba(0,0,0,0.6);
-      transition: background .12s ease, transform .12s ease, box-shadow .12s ease, color .12s ease;
+      transition: background .12s ease, transform .12s ease, box-shadow .12s.ease, color .12s.ease;
     }
     .mail-btn svg {
       width: 16px;
@@ -750,7 +750,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: background .12s.ease, transform .12s.ease, box-shadow .12s.ease;
+      transition: background .12s ease, transform .12s.ease, box-shadow .12s.ease;
     }
     .camera-btn svg { width: 18px; height: 18px; fill: currentColor; }
     .camera-btn:hover {
@@ -899,10 +899,11 @@
       background: rgba(255,255,255,0.04);
     }
 
+    /* BOTÓN DE ENVIAR CARTA MÁS ABAJO DEL CUADRO */
     #open-compose-btn {
       position:absolute;
       right:16px;
-      bottom:70px;
+      bottom:16px;   /* ANTES 70px, ahora está pegado abajo del modal */
       width:44px;
       height:44px;
       border-radius:50%;
@@ -2420,3 +2421,4 @@
   </script>
 </body>
 </html>
+```
